@@ -58,5 +58,6 @@ $$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\
 >    > C. $s'$에서 $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a'$를 선택  
 >    > D. $\theta$업데이트: $\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla_\theta Q_\theta (s, a)$  
 >    > E. $s \gets s'$  
-> 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복    
+> 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복   
+    
 환경에서 실제로 실행할 액션을 선택하는 부분은 3-A이고, TD 타깃의 값을 계산하기 위한 액션을 선택하는 부분은 3-C이다. 3-C에서 선택한 액션은 실제로 실행되지는 않으며, 오로지 업데이트를 위한 계산에만 사용되는 부분이다. 이때 실행한 액션을 선택하는 행동 정책은 $\epsilon - greedy Q_\theta$이고, 학습 대상이 되는 타깃 정책은 $greedy Q_\theta$로 서로 다르기 때문에 Q러닝은 off-policy 학습임을 확인할 수 있다.
