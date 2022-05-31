@@ -46,12 +46,12 @@ $$ L(θ)= \mathbb{E} [(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))^2]$$
 $$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla\theta Q_\theta (s, a)$$    
 이 식을 이용하여 $\theta$를 계속해서 업데이트해 나가면 $Q_\theta (s, a)$는 점점 최적의 액션-가치 함수 $Q_* (s, a)$에 가까워질 것이다.   
 #### 딥 Q러닝 pseudo code
-> 1. $Q_\theta$의 파라미터 $\theta$를 초기화
-> 2. 에이전트의 상태 $s$를 초기화 $(s \gets s_0)$
-> 3. 에피소드가 끝날 때까지 다음(A~E)을 반복
->    > A. $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a$를 선택
->    > B. $a$를 실행하여 $r$과 $s'$을 관측
->    > C. $s'$에서 $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a'$를 선택
->    > D. $\theta$업데이트: $\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla\theta Q_\theta (s, a)$
->    > E. $s \gets s'$
-> 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복
+> 1. $Q_\theta$의 파라미터 $\theta$를 초기화  
+> 2. 에이전트의 상태 $s$를 초기화 $(s \gets s_0)$  
+> 3. 에피소드가 끝날 때까지 다음(A~E)을 반복  
+>    > A. $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a$를 선택  
+>    > B. $a$를 실행하여 $r$과 $s'$을 관측  
+>    > C. $s'$에서 $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a'$를 선택  
+>    > D. $\theta$업데이트: $\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla\theta Q_\theta (s, a)$  
+>    > E. $s \gets s'$  
+> 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복  
