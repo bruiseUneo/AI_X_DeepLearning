@@ -47,7 +47,7 @@ $$Q(s, a) \gets Q(s, a)+ \alpha(r+ \gamma max_a' Q(s', a')-Q(s, a))$$
 딥 Q러닝은 Q러닝을 뉴럴넷으로 확장하는 것이다. 테이블 업데이트 식을 보면 정답인 $r+ \gamma max_a' Q_* (s',a')$와 현재 추측치인 $Q(s, a)$ 사이 차이를 줄이는 방향으로 업데이트 한다. 뉴럴넷에서도 마찬가지 방식으로 손실 함수를 정의할 수 있다.  $r+ \gamma max_a' Q (s',a')$를 정답으로 보고, 이것과 $Q_\theta (s, a)$ 사이 차이의 제곱을 손실 함수라 정의하겠다.   
 $$ L(θ)= \mathbb{E} [(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))^2]$$     
 손실 함수를 정의할 때에는 기댓값 연산자 $\mathbb{E}$가 반드시 필요하다. 같은 상태 $s$에서 같은 액션 $a$를 선택한다 하더라도 매번 다른 상태에 도달할 수 있기 때문이다. 물론 실제로 뉴럴넷을 업데이트할 때는 샘플 기반 방법론으로 $\mathbb{E}$를 무시하고 계산할 수 있다. 데이터를 여러 개 모아서 그 평균을 이용해 업데이트하는 것이 그 방법이다. 이런 방식으로 하나의 데이터에 대해 $\theta$를 업데이트하는 식을 적어보면 다음과 같다.  
-$$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla\theta Q_\theta (s, a)$$    
+$$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla_\theta Q_\theta (s, a)$$    
 이 식을 이용하여 $\theta$를 계속해서 업데이트해 나가면 $Q_\theta (s, a)$는 점점 최적의 액션-가치 함수 $Q_* (s, a)$에 가까워질 것이다.   
 #### 3.3 딥 Q러닝 pseudo code   
 > 1. $Q_\theta$의 파라미터 $\theta$를 초기화  
@@ -56,6 +56,7 @@ $$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\
 >    > A. $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a$를 선택  
 >    > B. $a$를 실행하여 $r$과 $s'$을 관측  
 >    > C. $s'$에서 $Q_\theta$에 대한 $\epsilon - greedy$를 이용하여 액션 $a'$를 선택  
->    > D. $\theta$업데이트: $\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla\theta Q_\theta (s, a)$  
+>    > D. $\theta$업데이트: $\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\nabla_\theta Q_\theta (s, a)$  
 >    > E. $s \gets s'$  
-> 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복  
+> 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복    
+환경에서 실제로 실행할 액션을 선택하는 부분은 3-A이고, TD 타깃의 값을 계산하기 위한 액션을 선택하는 부분은 3-C이다. 3-C에서 선택한 액션은 실제로 실행되지는 않으며, 오로지 업데이트를 위한 계산에만 사용되는 부분이다. 이때 실행한 액션을 선택하는 행동 정책은 $\epsilon - greedy Q_\theta$이고, 학습 대상이 되는 타깃 정책은 $greedy Q_\theta$로 서로 다르기 때문에 Q러닝은 off-policy 학습임을 확인할 수 있다.
