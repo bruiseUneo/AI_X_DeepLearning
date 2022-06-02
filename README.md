@@ -3,9 +3,9 @@
 > * Members: 기계공학 2017035787 채민호 / 전기공학 2016026608 강민지
 
  
-DQN wiht a 2D particle survival game  
+DQN wiht a particle survival game  
 =====================================
-이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 2D particle survival game에 적용해본다. 2D particle survival game environment는 다음과 같은 성질을 갖으며 [Karpathy's Waterworld environment](https://cs.stanford.edu/people/karpathy/reinforcejs/waterworld.html)를 참고하였다.
+이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. particle survival game environment는 다음과 같은 성질을 갖으며 [Karpathy's Waterworld environment](https://cs.stanford.edu/people/karpathy/reinforcejs/waterworld.html)를 참고하였다.
 * Deep RL agents to learn to stay alive as long as possible via avoiding collisions with obstacles.  
 * DQN agent implementation is provided for immediate usage.  
 * The agent reawrd scheme is +1 for each time step alive, and -100 for obstacle collision.  
@@ -70,4 +70,89 @@ $$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\
 >    > E. $s \gets s'$  
 > 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복   
     
-환경에서 실제로 실행할 액션을 선택하는 부분은 3-A이고, TD 타깃의 값을 계산하기 위한 액션을 선택하는 부분은 3-C이다. 3-C에서 선택한 액션은 실제로 실행되지는 않으며, 오로지 업데이트를 위한 계산에만 사용되는 부분이다. 이때 실행한 액션을 선택하는 행동 정책은 $\epsilon - greedy\ Q_\theta$이고, 학습 대상이 되는 타깃 정책은 $greedy\ Q_\theta$로 서로 다르기 때문에 Q러닝은 off-policy 학습임을 확인할 수 있다.
+환경에서 실제로 실행할 액션을 선택하는 부분은 3-A이고, TD 타깃의 값을 계산하기 위한 액션을 선택하는 부분은 3-C이다. 3-C에서 선택한 액션은 실제로 실행되지는 않으며, 오로지 업데이트를 위한 계산에만 사용되는 부분이다. 이때 실행한 액션을 선택하는 행동 정책은 $\epsilon - greedy\ Q_\theta$이고, 학습 대상이 되는 타깃 정책은 $greedy\ Q_\theta$로 서로 다르기 때문에 Q러닝은 off-policy 학습임을 확인할 수 있다.  
+   
+4.particle survival game
+----------------------------   
+   
+* Environment   
+  
+ ```python   
+class Environment():   
+    def __init__(self, n_obstacles):
+        ...
+        # self.state_init = np.array([x_pos, y_pos, x_vel, y_vel, type])
+        self.state_init = self.init_state(n_obstacles)
+        ...
+    
+    def init_state(self, n_obstacles):
+        state = -0.5 + np.random.random((1 + n_particles, 5))  # initialize
+        state[:, [0, 1]] *= 4.0  # spread out particle positions
+        state[0, 4] = -1  # agent type = -1
+        state[1:, 4] = 1  # particles type = 1
+        if n_particles > 0:
+            v_norm = np.linalg.norm(state[1:, [2, 3]], axis=1)  # velocity magnitudes
+            # Make v_speed = 0.05, v_direction = random
+            state[1:, [2, 3]] = self.v_particles * np.divide(state[1:, [2, 3]], v_norm[:, None])
+        state[0, [2, 3]] = 0.0  # zero vx, zero vy
+        return state
+```   
+가장먼저 init_state함수를 통해 상태를 초기화 한다. particle과 obstacles의 상태 s는 길이 5의 벡터이다.   
+$$s = ( position of x, position of y, velocity of x, velocity of y, type(particle or obstacles) )$$   
+   
+```python
+    def step(self, action):
+        # self.action = 0:"up", 1:"right", 2:"down", 3:"left"
+        # self.state = 0:"x", 1:"y", 2:"vx", 3:"vy", 4:"type"
+        # Build next state
+        state, reward, done = self.state.copy(), 0.0, False
+        if self.state[0, 4] >= 0: # check agent is of type < 0
+            raise Exception("err: Trying to perform action on non-agent particle!")
+        if action == 0:     # up: vy += dv
+            self.state[0, 3] += self.dv_agent
+        elif action == 1:   # right: vx += dv
+            self.state[0, 2] += self.dv_agent
+        elif action == 2:   # down: vy -= dv
+            self.state[0, 3] += -self.dv_agent
+        elif action == 3:   # left: vx -= dv
+            self.state[0, 2] += -self.dv_agent
+        else:
+            raise Exception("invalid action!")
+        # Update positions: x = x + v * dt
+        self.state[:, 0] += self.state[:, 2] * self.dt
+        self.state[:, 1] += self.state[:, 3] * self.dt
+        ...
+        if self.add_agent_particle_interactions:
+            ...
+            reward += 1    # reward for surviving
+            done = (n_type_captured[1] > 0)
+        return self.state, reward, done
+        
+    def reset(self):
+        self.state = self.state_init.copy()
+        self.reward_history = [] # rewards of episode
+        self.state_history = [] # states of episode
+        return self.state
+```    
+그 후 step함수를 통해 에이전트로부터 액션을 받아서 상태변이를 일으키고 다음 상태와 보상, 에피소드가 끝났는지 여부를 리턴해준다. particle이 time step마다 살아있으면 +1 보상을 주고, partice이 ostacles와 충돌하는 순간 에피소드는 끝나게 된다. 마지막으로 reset함수를 통해 에이전트가 종료 상태에 도달했으면 다시 처음 상태로 돌려놓는다.
+   
+      
+* Agent
+   
+```python
+class DQNAgnet():
+    def __init__(self, env, n_sector, sector_radius):
+        ...
+        self.gamma = 0.99  # discount parameter (important)
+        self.memory = deque(maxlen=20000)  # replay buffer
+        self.batch_size = 200  # training batch size
+        ...
+```
+다음으로 하이퍼 파라미터를 정의한다. 감쇠 인자 $\gamma$는 미래 얻을 보상에 비해 당장 얻는 보상을 얼마나 더 중요하게 여길 것인지 나타내는 파라미터로, 0에서 1사이의 숫자이다. 리플레이 버퍼의 크기는 2만이고 batch_size의 크기는 200으로, 최신 2만 개의 데이터를 들고 있다가 필요할 때마다 200만큼의 데이터를 뽑아서 제공해준다.
+
+```python
+        self.model = Sequential() # DQN
+        self.model.add(Dense(60, input_dim=self.sensors.observation_size, activation="relu"))
+        self.model.add(Dense(60, activation="relu"))
+        self.model.add(Dense(self.action_size, activation="linear"))
+        self.model.compile(loss="mse", optimizer=Adam(lr=1E-3))
