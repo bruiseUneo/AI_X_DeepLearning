@@ -11,9 +11,13 @@ DQN wiht a particle survival game
 * The agent reawrd scheme is +1 for each time step alive, and -100 for obstacle collision.  
 * The episode termination condition in agent collision with any obstacles.   
    
+   
+   
 1.이론적 배경: Q-Learning 
----------------------------
-
+---------------------------   
+   
+   
+   
 2.Deep RL
 ----------
 #### 2.1 RL의 한계와 Deep RL의 등장   
@@ -41,8 +45,10 @@ RL(강화학습)은 Markov Decision Process(MDP) 문제를 푸는 것이다. MDP
 마지막으로 뉴럴넷을 구성하는 파라미터들인 w,b의 값을 찾는 과정인 학습 부분에 대해서 얘기해볼 것이다. 우리는 손실함수를 통하여 뉴럴넷의 아웃풋이 주어진 데이터로부터 틀린 정도를 확인할 수 있다. 그리고 우리의 목표는 손실 함수의 값이 줄어들도록 하는 것이다. 그렇다면 손실함수 L(w)의 값을 계산하는 데에 있어 w가 미치는 영향력을 알아보아야 할 것이다. W를 아주 조금 증가시키거나 감소시켰을 때 함수 L(w)의 값이 어떻게 바뀌는 지를 관찰해 보면 영향력을 알 수 있다. 그리고 이는 L(w)를 w로 미분해보면 그 영향력을 쉽게 알 수 있다. 그리고 수많은 파라미터가 있는 신경망에서는 편미분(partial derivative)를 통해 각각 파라미터의 영향력을 평가하게 된다. 이를 수식으로 표현하면   
 \nabla~w~L(w)=(\frac{\partial L\left(w\right)}{\partial w~1~},\frac{\partial L\left(w\right)}{\partial w~2~},\ldots\ ,\frac{\partial L\left(w\right)}{\partial w~n~})  
 으로 표현된다. 그리고 우리는 α라는 상수를 통해 얼마나 이동시킬 지 결정한다. α는 업데이트 크기를 결정하는 상수로, 러닝 레이트(learning rate)라고 불러진다. 따라서 그라디언트에 α를 곱하여 원래의 값에 빼주면 우리가 목적 함수를 최소화 해나가는 과정을 수행할 수 있고 이는 그라디언트 디센트 (gradient descent, 경사하강법)이라고 불린다.  
-\ast\ast\mathbf{w}^{\prime^\ast}\ast=\ast\ast\mathbit{w}\ast\ast-\alpha\ast\nabla~w~L(w)   
-     
+\ast\ast\mathbf{w}^{\prime^\ast}\ast=\ast\ast\mathbit{w}\ast\ast-\alpha\ast\nabla~w~L(w)     
+   
+    
+    
 3.DQN   
 ------
 모델 프리 상황에 상태 공간(state space)과 액션 공간(action space)이 매우 커서 밸류를 일일이 테이블에 담지 못하는 상황에서는 본격적으로 뉴럴넷과 강화 학습이 접목한다.   
@@ -70,8 +76,10 @@ $$\theta' = \theta + \alpha(r+ \gamma max_a' Q_\theta (s', a')-Q_\theta (s, a))\
 >    > E. $s \gets s'$  
 > 4. 에피소드가 끝나면 다시 2번으로 돌아가서 $\theta$가 수렴할 때까지 반복   
     
-환경에서 실제로 실행할 액션을 선택하는 부분은 3-A이고, TD 타깃의 값을 계산하기 위한 액션을 선택하는 부분은 3-C이다. 3-C에서 선택한 액션은 실제로 실행되지는 않으며, 오로지 업데이트를 위한 계산에만 사용되는 부분이다. 이때 실행한 액션을 선택하는 행동 정책은 $\epsilon - greedy\ Q_\theta$이고, 학습 대상이 되는 타깃 정책은 $greedy\ Q_\theta$로 서로 다르기 때문에 Q러닝은 off-policy 학습임을 확인할 수 있다.  
-   
+환경에서 실제로 실행할 액션을 선택하는 부분은 3-A이고, TD 타깃의 값을 계산하기 위한 액션을 선택하는 부분은 3-C이다. 3-C에서 선택한 액션은 실제로 실행되지는 않으며, 오로지 업데이트를 위한 계산에만 사용되는 부분이다. 이때 실행한 액션을 선택하는 행동 정책은 $\epsilon - greedy\ Q_\theta$이고, 학습 대상이 되는 타깃 정책은 $greedy\ Q_\theta$로 서로 다르기 때문에 Q러닝은 off-policy 학습임을 확인할 수 있다.   
+     
+      
+      
 4.particle survival game
 ----------------------------   
    
@@ -98,7 +106,7 @@ class Environment():
         return state
 ```   
 가장먼저 init_state함수를 통해 상태를 초기화 한다. particle과 obstacles의 상태 s는 길이 5의 벡터이다.   
-$$s = ( position of x, position of y, velocity of x, velocity of y, type(particle or obstacles) )$$   
+s = ( position of x, position of y, velocity of x, velocity of y, type(particle or obstacles) )   
    
 ```python
     def step(self, action):
@@ -156,3 +164,20 @@ class DQNAgnet():
         self.model.add(Dense(60, activation="relu"))
         self.model.add(Dense(self.action_size, activation="linear"))
         self.model.compile(loss="mse", optimizer=Adam(lr=1E-3))
+```   
+Sequential()은 케라스의 모델로, 레이어를 선형으로 연결하여 구성한다. 레이어 인스턴스를 생성자에게 넘겨줌으로써 Sequential 모델을 구성하고 .add()메소드로 레이어를 추가할 수 있다.   
+input_dim의 값은 particle sensor의 observation size = ? 로 입력 차원이 ?개, 즉 입력 노드가 ?개라는 뜻이다. 이 ?개의 노드에 60개의 노드(출력 뉴런)를 연결해 준 후 add를 통해 60개의 노드를 가진 레이어와 action size = 5개의 노드를 가진 레이어를 추가한다. 마지막 층을 제외한 각 레이어에는 앞서 설명했던 ReLU라는 활성 함수가 포함되어 있다. 이렇게 만들어진 sequential 모델의 모양은 대략 다음과 같다.   
+(그림)   
+.compile()는 만들어진 모델을 컴파일하는 메소드이다. loss는 손실함수로, 뉴럴넷의 아웃풋이 주어진 데이터로부터 틀린 정도를 나타낸다. "mse"는 손실함수로 mse(평균제곱오차)를 사용하겠다는 뜻이다. optimizer는 그래디언트 클리핑(gradient clipping)을 조절하는 파라미터로 손실 함수를 기반으로 네트워크가 어떻게 업데이트 될 지 결정한다. 여기서는 adam을 사용하였다. 잘 알려진 방법으로는 SGD(확률적 경사 하강법)가 있다.   
+   
+```python
+    def get_action(self, ob):
+        self.epsilon = max(self.epsilon_range)
+        if random.uniform(0, 1) <= self.epsilon: # explore
+            action = random.choice(list(range(self.action_size)))
+        else: # exploit
+            Qpred = self.model.predict(np.reshape(ob, [1, len(ob)]))[0]
+            action = random.choice(np.flatnonzero(Qpred == np.amax(Qpred)))
+        return action 
+```   
+다음으로 get_action 함수를 통해 tkdxo 
