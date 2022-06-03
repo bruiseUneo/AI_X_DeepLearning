@@ -244,6 +244,7 @@ Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 
    
 * 결과  
   * model.summary(): 모델의 구조
+  <img src="./img/model_summary.png" width="70%" height="90%"></img>
     
 Libraries required
 ------------------   
