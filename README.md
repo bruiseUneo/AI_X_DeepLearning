@@ -210,4 +210,33 @@ class DQNAgnet():
         tf.keras.backend.clear_session() # temporary fix for memory leak in tf 2.0
         return loss_avg
 ```
-실제로 학습을 진행하는 부분은 train함수로, 에피소드 하나가 끝날 때마다 본 함수가 호출된다. 먼저 리플레이 버퍼에서 미니 배치를 뽑고 그 수 만큼 업데이트를 한다. 그 후 해당 데이터를 이용하여 타깃 네트워크 Q_target을 정의한다. 손실 함수 $L(\theta)$의 직관적 의미는 정답과 추측 사이의 차이이며, 이 차이를 줄이는 방향으로 $\theta$가 업데이트된다. 이 때 별도의 타깃 네트워크를 정의하면 학습을 안정화시킬 수 있다. 정의된 Q_target을 parameter로 loss값을 계산하고, loss가 계산되고 나면 .fit()메소드로 실제 손실함수 mse를 구한다.
+실제로 학습을 진행하는 부분은 train함수로, 에피소드 하나가 끝날 때마다 본 함수가 호출된다. 먼저 리플레이 버퍼에서 미니 배치를 뽑고 그 수 만큼 업데이트를 한다. 그 후 해당 데이터를 이용하여 타깃 네트워크 Q_target을 정의한다. 손실 함수 $L(\theta)$의 직관적 의미는 정답과 추측 사이의 차이이며, 이 차이를 줄이는 방향으로 $\theta$가 업데이트된다. 이 때 별도의 타깃 네트워크를 정의하면 학습을 안정화시킬 수 있다. 정의된 Q_target을 parameter로 loss값을 계산하고, loss가 계산되고 나면 .fit()메소드로 실제 손실함수 mse를 구한다.   
+   
+   
+* Main   
+   
+```python   
+env = Environment(n_particles=110)
+agent = DQNAgent(env, n_sectors=4, sector_radius=1.0)
+...
+n_episodes = 1000
+iter_max = 2000
+...
+```
+
+```python   
+for episode in range(n_episodes):
+    iter = 0
+    env.reset() # reset environment
+    ob = agent.observe(env) # observe
+    while iter < iter_max:
+        action = agent.get_action(ob) # follow epsilon-greedy policy
+        state_next, reward, done = env.step(action) # evolve
+        ob_next = agent.observe(env) # observe
+        agent.memorize((ob, action, reward, ob_next, done)) # save to replay buffer
+        iter += 1
+        if done:
+            break # terminate
+        ob = ob_next # transition   
+```
+
