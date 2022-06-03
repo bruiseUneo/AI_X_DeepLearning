@@ -190,6 +190,12 @@ class DQNAgnet():
         for session in range(self.n_training_sessions): # train DQN on mini-batches of replay buffer
             minibatch = random.sample(self.memory, self.batch_size) # sample replay buffer
             obs, actions, rewards, obs_next, dones = [], [], [], [], []
+            for (ob, action, reward, ob_next, done) in minibatch:
+                obs.append(ob)
+                actions.append(action)
+                rewards.append(reward)
+                obs_next.append(ob_next)
+                dones.append(done)
             ...
             Q = self.model.predict(obs) # current Q[obs,:] estimate
             Q_next = self.model.predict(obs_next) # current Q[obs_next,:] estimate
@@ -204,3 +210,4 @@ class DQNAgnet():
         tf.keras.backend.clear_session() # temporary fix for memory leak in tf 2.0
         return loss_avg
 ```
+실제로 학습을 진행하는 부분은 train함수로, 에피소드 하나가 끝날 때마다 본 함수가 호출된다. 먼저 리플레이 버퍼에서 미니 배치를 뽑고 그 수 만큼 업데이트를 한다. 그 후 해당 데이터를 이용하여 타깃 네트워크 Q_target을 정의한다. 손실 함수 $L(\theta)$의 직관적 의미는 정답과 추측 사이의 차이이며, 이 차이를 줄이는 방향으로 $\theta$가 업데이트된다. 이 때 별도의 타깃 네트워크를 정의하면 학습을 안정화시킬 수 있다. 정의된 Q_target을 parameter로 loss값을 계산하고, loss가 계산되고 나면 .fit()메소드로 실제 손실함수 mse를 구한다.
