@@ -165,9 +165,9 @@ class DQNAgnet():
         self.model.add(Dense(self.action_size, activation="linear"))
         self.model.compile(loss="mse", optimizer=Adam(lr=1E-3))
 ```   
-Sequential()은 케라스의 모델로, 레이어를 선형으로 연결하여 구성한다. 레이어 인스턴스를 생성자에게 넘겨줌으로써 Sequential 모델을 구성하고 .add()메소드로 레이어를 추가할 수 있다.   
-input_dim의 값은 particle sensor의 observation size = 10으로 입력 차원이 10개, 즉 입력 노드가 10개라는 뜻이다. 이 10개의 노드에 60개의 노드(출력 뉴런)를 연결해 준 후 add를 통해 60개의 노드를 가진 레이어와 action size = 5개의 노드를 가진 레이어를 추가한다. 마지막 층을 제외한 각 레이어에는 앞서 설명했던 ReLU라는 활성 함수가 포함되어 있다. 이렇게 만들어진 sequential 모델의 모양은 대략 다음과 같다.   
-(그림)   
+이제 네트워크에 쓰일 레이어들을 선언해주고, 선언된 레이어를 엮어서 뉴럴넷의 연산 그래프를 정의한다. Sequential()은 케라스의 모델로, 레이어를 선형으로 연결하여 구성한다. 레이어 인스턴스를 생성자에게 넘겨줌으로써 Sequential 모델을 구성하고 .add()메소드로 레이어를 추가할 수 있다. DQN에 쓰일 뉴럴넷 구조는 다음과 같다.   
+(그림)      
+그림과 같이 particle의 sensor가 observe한 결과를 나타내는 길이 10((wall_or_obstacles=2) * (number_of_sectors=4) + (vx, vy))의 input vector가 들어오면 모든 액션에 대해 각 액션의 밸류인 Q값을 리턴한다. particle이 선택할 수 있는 액션은 4개이기 때문에 아웃풋의 차원은 4가 된다.마지막 층을 제외한 각 레이어에는 앞서 설명했던 ReLU라는 활성 함수가 포함되어 있다. 맨 마지막 아웃풋은 결국 Q밸류이기 때문에 $[-\infty, \infty]$ 사이 어느 값이든 취할 수가 있다. 그렇기 때문에 양수만 리턴할 수 있는 ReLU를 넣어주면 안된다.   
 .compile()는 만들어진 모델을 컴파일하는 메소드이다. loss는 손실함수로, 뉴럴넷의 아웃풋이 주어진 데이터로부터 틀린 정도를 나타낸다. "mse"는 손실함수로 mse(평균제곱오차)를 사용하겠다는 뜻이다. optimizer는 그래디언트 클리핑(gradient clipping)을 조절하는 파라미터로 손실 함수를 기반으로 네트워크가 어떻게 업데이트 될 지 결정한다. 여기서는 adam을 사용하였다. 잘 알려진 방법으로는 SGD(확률적 경사 하강법)가 있다.   
    
 ```python
@@ -180,4 +180,4 @@ input_dim의 값은 particle sensor의 observation size = 10으로 입력 차원
             action = random.choice(np.flatnonzero(Qpred == np.amax(Qpred)))
         return action 
 ```   
-다음으로 get_action 함수를 통해 tkdxo 
+다음으로 get_action 함수를 통해
