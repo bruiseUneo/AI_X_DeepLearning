@@ -1,11 +1,11 @@
 > AI-X: Deep Learning 최종 그룹 프로젝트  
 > * Title: DQN with a 2D particle survival game   
 > * Members: 기계공학 2017035787 채민호 / 전기공학 2016026608 강민지
-
+> * 
  
 DQN wiht a particle survival game  
 =====================================
-이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. particle survival game environment는 다음과 같은 성질을 갖으며 [Karpathy's Waterworld environment](https://cs.stanford.edu/people/karpathy/reinforcejs/waterworld.html)를 참고하였다.
+이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. particle survival game environment는 다음과 같은 성질을 갖으며 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
 * Deep RL agents to learn to stay alive as long as possible via avoiding collisions with obstacles.  
 * DQN agent implementation is provided for immediate usage.  
 * The agent reawrd scheme is +1 for each time step alive, and -100 for obstacle collision.  
@@ -242,5 +242,17 @@ for episode in range(n_episodes):
 Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 지정한다. 그 후 앞서 정의한 클래스와 함수들을 이용하여 실제로 경험을 쌓고, train 함수를 호출하여 파라미터를 업데이트한다. while loop 안에서 하나의 에피소드가 끝날 때까지 액션을 선택하고 실행하여 얻은 데이터를 리플레이 버퍼로 보내는 것을 반복한다. 그리고 에피소드가 끝날 때마다 train 함수를 호출한다.   
    
    
-* 결과
-
+* 결과  
+  * model.summary(): 모델의 구조
+    
+Libraries required
+------------------   
+* tensorflow 2.0.0
+* numpy, scipy, matplotlib, h5py, ffmpeg   
+   
+   
+Related Work
+------------
+[XY_universe](https://github.com/ankonzoid/XY_universe)     
+[Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)     
+[Karpathy's Waterworld environment](https://cs.stanford.edu/people/karpathy/reinforcejs/waterworld.html)    
