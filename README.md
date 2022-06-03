@@ -216,14 +216,11 @@ class DQNAgnet():
 * Main   
    
 ```python   
-env = Environment(n_particles=110)
+env = Environment(n_particles=55)
 agent = DQNAgent(env, n_sectors=4, sector_radius=1.0)
-save_models = False
-save_animations = True
-n_episodes = 1000
-iter_max = 2000
-n_reward_max = 0
-loss = -1 # track loss
+n_episodes = 500
+iter_max = 1000
+...
 
 for episode in range(n_episodes):
     iter = 0
@@ -237,6 +234,9 @@ for episode in range(n_episodes):
         iter += 1
         if done:
             break # terminate
-        ob = ob_next # transition   
+        ob = ob_next # transition  
+    ...
+    # Train agent
+    loss = agent.train()
 ```
-에이전트와 환경을 만들고
+우선 에이전트와 환경을 만들고 에피소드 개수를 지정한다. 그 후 앞서 정의한 클래스와 함수들을 이용하여 실제로 경험을 쌓고, train 함수를 호출하여 파라미터를 업데이트한다. while loop 안에서 하나의 에피소드가 끝날 때까지 액션을 선택하고 실행하여 얻은 데이터를 리플레이 버퍼로 보내는 것을 반복한다. 
