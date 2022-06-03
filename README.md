@@ -166,7 +166,9 @@ class DQNAgnet():
         self.model.compile(loss="mse", optimizer=Adam(lr=1E-3))
 ```   
 이제 네트워크에 쓰일 레이어들을 선언해주고, 선언된 레이어를 엮어서 뉴럴넷의 연산 그래프를 정의한다. Sequential()은 케라스의 모델로, 레이어를 선형으로 연결하여 구성한다. 레이어 인스턴스를 생성자에게 넘겨줌으로써 Sequential 모델을 구성하고 .add()메소드로 레이어를 추가할 수 있다. DQN에 쓰일 뉴럴넷 구조는 다음과 같다.   
-(그림)      
+
+<img src="./img/DQN.jpg" width="70%" height="90%"></img>
+
 그림과 같이 particle의 sensor가 observe한 결과를 나타내는 길이 10((wall_or_obstacles=2) * (number_of_sectors=4) + (vx, vy))의 input vector가 들어오면 모든 액션에 대해 각 액션의 밸류인 Q값을 리턴한다. particle이 선택할 수 있는 액션은 4개이기 때문에 아웃풋의 차원은 4가 된다.마지막 층을 제외한 각 레이어에는 앞서 설명했던 ReLU라는 활성 함수가 포함되어 있다. 맨 마지막 아웃풋은 결국 Q밸류이기 때문에 $[-\infty, \infty]$ 사이 어느 값이든 취할 수가 있다. 그렇기 때문에 양수만 리턴할 수 있는 ReLU를 넣어주면 안된다.   
 .compile()는 만들어진 모델을 컴파일하는 메소드이다. loss는 손실함수로, 뉴럴넷의 아웃풋이 주어진 데이터로부터 틀린 정도를 나타낸다. "mse"는 손실함수로 mse(평균제곱오차)를 사용하겠다는 뜻이다. optimizer는 그래디언트 클리핑(gradient clipping)을 조절하는 파라미터로 손실 함수를 기반으로 네트워크가 어떻게 업데이트 될 지 결정한다. 여기서는 adam을 사용하였다. 잘 알려진 방법으로는 SGD(확률적 경사 하강법)가 있다.   
    
@@ -180,4 +182,25 @@ class DQNAgnet():
             action = random.choice(np.flatnonzero(Qpred == np.amax(Qpred)))
         return action 
 ```   
-다음으로 get_action 함수를 통해
+다음으로 get_action 함수를 통해 실제로 행할 액션을 $\epsilon - greedy$ 방식으로 선택해준다. [0, 1]사이 실수 값이 나올 수 있는 동전을 던져서 동전이 $\epsilon$ 값보다 작으면 랜덤 액션을 하고, 그보다 크면 Q값이 제일 큰 액션을 선택하는 방식이다. $\epsilon$ 덕분에 환경에서 다양한 액션을 선택해보며 환경 속을 탐험해 볼 수 있다.
+   
+```python
+    def train(self):
+        ...
+        for session in range(self.n_training_sessions): # train DQN on mini-batches of replay buffer
+            minibatch = random.sample(self.memory, self.batch_size) # sample replay buffer
+            obs, actions, rewards, obs_next, dones = [], [], [], [], []
+            ...
+            Q = self.model.predict(obs) # current Q[obs,:] estimate
+            Q_next = self.model.predict(obs_next) # current Q[obs_next,:] estimate
+            Q_target = Q.copy() # construct target Q
+            for i, (action, reward, done) in enumerate(zip(actions, rewards, dones)):
+                Q_target[i, action] = (reward + self.gamma * np.amax(Q_next[i,:])) if not done else reward
+                loss_avg += np.abs(Q[i, action] - Q_target[i, action])**2
+            self.model.fit(obs, Q_target, epochs=1, verbose=False) # train
+        loss_avg /= self.batch_size
+        loss_avg /= self.n_training_sessions
+        self.epsilon_range[0] *= self.epsilon_decay # decary agent exploration
+        tf.keras.backend.clear_session() # temporary fix for memory leak in tf 2.0
+        return loss_avg
+```
