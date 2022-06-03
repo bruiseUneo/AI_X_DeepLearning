@@ -31,7 +31,7 @@ RL(강화학습)은 Markov Decision Process(MDP) 문제를 푸는 것이다. MDP
 그 후에 어떤 함수를 사용할 것인가에 대한 고민이 남게 된다. 현대의 강화 학습에서 그 답은 “인공 신경망(Artificial Neural Network)”이다. 뉴럴넷의 본질은 매우 유연한 함수이다. 함수에 포함된 프리 파라미터를 이용하여 세상의 어떠한 복잡한 관계도 피팅할 수 있게 해준다. 1차함수의 경우 프리 파라미터가 2개, 16차 함수의 경우 17개이다. 그러나 웬만한 신경망은 프리 파라미터가 100만 개를 넘어간다.   
    
 ![ANN](./img/ANN.png)   
-   
+
 위 그림은 인경신경망 개요도로, 가장 전형적이고 간단한 신경망의 예시이다. 이 신경망은 길이가 3인 벡터를 인풋으로 받아 값 하나를 리턴하는 함수이다. 함수 안에는 히든 레어이가 두 층이 쌓여 있다. 그리고 각각의 히든 레이어는 4개의 노드로 구성되어 있다. 다시 말해 신경망은 히든 레이어로 구성되어 있고, 히든 레이어는 노드로 구성되어 있으므로 결국 노드가 신경망의 기본 구성 단위이다. 노드는 해당 노드로 들어오는 값을 선형 결합(linear combination)한 후에 비선형 함수(non-linear activation)를 적용한다. 하나의 노드를 떼어서 더욱 구체적으로 살펴보자.  
    
 ![node](./img/node.png)   
@@ -218,13 +218,13 @@ class DQNAgnet():
 ```python   
 env = Environment(n_particles=110)
 agent = DQNAgent(env, n_sectors=4, sector_radius=1.0)
-...
+save_models = False
+save_animations = True
 n_episodes = 1000
 iter_max = 2000
-...
-```
+n_reward_max = 0
+loss = -1 # track loss
 
-```python   
 for episode in range(n_episodes):
     iter = 0
     env.reset() # reset environment
@@ -239,4 +239,4 @@ for episode in range(n_episodes):
             break # terminate
         ob = ob_next # transition   
 ```
-
+에이전트와 환경을 만들고
