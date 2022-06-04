@@ -5,7 +5,7 @@
  
 DQN wiht a particle survival game  
 =====================================
-이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. particle survival game environment는 다음과 같은 성질을 갖으며 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
+이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. particle survival game environment는 다음과 같은 성질을 갖으며 Anson Wong의 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
 * Deep RL agents to learn to stay alive as long as possible via avoiding collisions with obstacles.  
 * DQN agent implementation is provided for immediate usage.  
 * The agent reawrd scheme is +1 for each time step alive, and -100 for obstacle collision.  
@@ -142,7 +142,7 @@ s = ( position of x, position of y, velocity of x, velocity of y, type(particle 
         self.state_history = [] # states of episode
         return self.state
 ```    
-그 후 step함수를 통해 에이전트로부터 액션을 받아서 상태변이를 일으키고 다음 상태와 보상, 에피소드가 끝났는지 여부를 리턴해준다. particle이 time step마다 살아있으면 +1 보상을 주고, partice이 ostacles와 충돌하는 순간 에피소드는 끝나게 된다. 마지막으로 reset함수를 통해 에이전트가 종료 상태에 도달했으면 다시 처음 상태로 돌려놓는다.
+그 후 step함수를 통해 에이전트로부터 액션을 받아서 상태변이를 일으키고 다음 상태와 보상, 에피소드가 끝났는지 여부를 리턴해준다. particle이 time step마다 살아있으면 +1 보상을 주고, partice이 ostacles와 충돌하는 순간 -100의 보상을 받으며 에피소드는 끝나게 된다. 마지막으로 reset함수를 통해 에이전트가 종료 상태에 도달했으면 다시 처음 상태로 돌려놓는다.
    
       
 * Agent
@@ -243,8 +243,14 @@ Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 
    
    
 * 결과  
-  * model.summary(): 모델의 구조   
-<img src="./img/model_summary.png" width="70%" height="70%"></img>
+  * 모델의 구조(model.summary())
+<img src="./img/model_summary.png" width="70%" height="70%"></img>   
+    
+  * 가장 학습이 잘 된 agent의 애니메이션   
+<img src="./img/agent_animation.gif" width="70%" height="70%"></img>  
+   
+  * 가장 학습이 잘 된 agent의 model   
+<img src="./img/agent_model.png" width="70%" height="70%"></img>   
     
 Libraries required
 ------------------   
@@ -257,3 +263,4 @@ Related Work
 [XY_universe](https://github.com/ankonzoid/XY_universe)     
 [Playing Atari with Deep Reinforcement Learning](https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf)     
 [Karpathy's Waterworld environment](https://cs.stanford.edu/people/karpathy/reinforcejs/waterworld.html)    
+노승은, <바닥부터 배우는 강화 학습>, 영진닷컴, 2020
