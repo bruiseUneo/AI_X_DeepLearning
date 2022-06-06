@@ -301,22 +301,23 @@ Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 
 
 
   * episode = 1, reward = 140
-    
+ 
+<img src="./img/ep1_animation.gif" width="80%" height="80%"></img>   
     
     
   * episode = 442, reward = 2000 (학습이 잘 된 agent의 애니메이션)   
  
-<img src="./img/animation.gif" width="70%" height="70%"></img>   
+<img src="./img/ep442_animation.gif" width="80%" height="80%"></img>   
    
       
   * reward
 
-<img src="./img/reward_episode.png" width="70%" height="70%"></img>   
+<img src="./img/reward_episode.png" width="50%" height="50%"></img>   
      
       
   * loss
  
-<img src="./img/loss_episode.png" width="70%" height="70%"></img>   
+<img src="./img/loss_episode.png" width="50%" height="50%"></img>   
     
     
     
