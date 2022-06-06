@@ -291,21 +291,34 @@ for episode in range(n_episodes):
     loss = agent.train()
 ```
 Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 지정한다. 그 후 앞서 정의한 클래스와 함수들을 이용하여 실제로 경험을 쌓고, train 함수를 호출하여 파라미터를 업데이트한다. while loop 안에서 하나의 에피소드가 끝날 때까지 액션을 선택하고 실행하여 얻은 데이터를 리플레이 버퍼로 보내는 것을 반복한다. 그리고 에피소드가 끝날 때마다 train 함수를 호출한다.   
-   
+    
    
 * 결과  
 
   * 모델의 구조(model.summary())
 
 <img src="./img/model_summary.png" width="70%" height="70%"></img>   
-    
-  * 가장 학습이 잘 된 agent의 애니메이션   
- 
-<img src="./img/agent_animation.gif" width="70%" height="70%"></img>  
-   
-  * 가장 학습이 잘 된 agent의 model   
 
-<img src="./img/agent_model.png" width="70%" height="70%"></img>   
+
+  * episode = 1, reward = 140
+    
+    
+    
+  * episode = 442, reward = 2000 (학습이 잘 된 agent의 애니메이션)   
+ 
+<img src="./img/animation.gif" width="70%" height="70%"></img>   
+   
+      
+  * reward
+
+<img src="./img/reward_episode.png" width="70%" height="70%"></img>   
+     
+      
+  * loss
+ 
+<img src="./img/loss_episode.png" width="70%" height="70%"></img>   
+    
+    
     
 Libraries required
 ------------------   
