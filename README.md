@@ -5,7 +5,7 @@
  
 DQN wiht a particle survival game  
 =====================================
-이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. particle survival game environment는 다음과 같은 성질을 갖으며 Anson Wong의 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
+이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. 이를 위해 우선 DQN의 이론적 배경이 되는 Q-Learing과 Deep RL의 개념을 다룬다. particle survival game environment는 다음과 같은 성질을 갖으며 Anson Wong의 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
 * Deep RL agents to learn to stay alive as long as possible via avoiding collisions with obstacles.  
 * DQN agent implementation is provided for immediate usage.  
 * The agent reawrd scheme is +1 for each time step alive, and -100 for obstacle collision.  
@@ -21,12 +21,13 @@ Q러닝은 Temporal Difference를 이용하여 최적의 정책을 찾는 방법
 즉 Temporal Difference는 즉 시간적인 차이를 이용한 것이다. 한 스텝이 지나고 혹은 조금이라도 시간이 흐르면 좀 더 정확한 추측을 할 수 있게 되는 것이고 바로 이것을 업데이트에 활용하는 방식이다.   
     
 #### 1.2 Q러닝의 의의    
-Q러닝은 처음으로 강화 학습이 딥러닝과 결합되어 멋진 성과를 보여준 학습 방법이다. 2015년 “Human-level control through deep reinforcement learning”이라는 제목의 논문으로 네이쳐지에 출판되었고, 딥러닝과 강화 학습의 Q러닝을 결합한 Deep Q learning이라는 알고리즘을 이용해 고전 비디오 게임인 아타리 2600을 사람 수준으로 플레이 하는 에이전트를 학습시켰다. 강화학습 에이전트가 포르 게이머 수준으로 플레이하는 요즘 시대에는 그리 새로운 것이 아니라고 느껴질 수 있겠지만 당시에는 강화 학습과 딥러닝 결합의 서막을 여는 사건이었다. 실제로 그 이후에 강화 학습과 딥러닝이 결합된 연구가 쏟아져 나오게 되었다.     
-    
+Q러닝은 처음으로 강화 학습이 딥러닝과 결합되어 멋진 성과를 보여준 학습 방법이다. 2015년 “Human-level control through deep reinforcement learning”이라는 제목의 논문으로 네이쳐지에 출판되었고, 딥러닝과 강화 학습의 Q러닝을 결합한 Deep Q learning이라는 알고리즘을 이용해 고전 비디오 게임인 아타리 2600을 사람 수준으로 플레이 하는 에이전트를 학습시켰다. 강화학습 에이전트가 포르 게이머 수준으로 플레이하는 요즘 시대에는 그리 새로운 것이 아니라고 느껴질 수 있겠지만 당시에는 강화 학습과 딥러닝 결합의 서막을 여는 사건이었다. 실제로 그 이후에 강화 학습과 딥러닝이 결합된 연구가 쏟아져 나오게 되었다.   
+   
 #### 1.3 On-Policy 와 Off- Policy    
 Q러닝의 강점에 들어가기에 앞서 Q러닝의 핵심적인 특징인 Off-policy 학습에 대해 알아보자. Temporary Difference 학습은 크게 On-Policy와 Off-Policy 학습으로 분류될 수 있다.   
 >On-Policy : 타깃 정책과 행동 정책이 같은 경우   
 >Off-Policy : 타깃 정책과 행동 정책이 다른 경우      
+   
 타깃 정책이란 강화하고자 하는 목표가 되는 정책이다. 학습의 대상이 되는 정책이고, 계속해서 업데이트 됨에 따라 점점 강화되는 정책이다. 반면 행동 정책은 실제로 환경과 상호작용하며 경험을 쌓고 있는 정책을 뜻한다. 그리고 On-Policy 학습 방식은 타깃 정책과 행동 정책이 일치하는 경우인데, 다시 말해 경험을 쌓는 정책이 곧 강화되고 있는 정책이다. 예를 들어 어떠한 프로게이머가 게임을 직접하며 게임 실력을 키우고 있다면 이는 on-policy 상황이다. 반면 그가 다른 사람의 게임을 보며 자신의 게임 실력을 키우려고 하고 있다면 이는 off-policy 상황일 것이다. 자신이 강화하고자 하는 것은 자신의 뇌 안에 있는 타깃 정책이지만 실제로 환경에서 경험을 쌓고 있는 정책은 다른 사람의 정책이기 때문이다. 정리하자면 간접 경험을 통해 게임 실력을 늘리고 있는 것이다.     
       
 #### 1.4 Off-policy 학습의 장점   
