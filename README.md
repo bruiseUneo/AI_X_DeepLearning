@@ -294,13 +294,17 @@ Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 
    
    
 * 결과  
+
   * 모델의 구조(model.summary())
+
 <img src="./img/model_summary.png" width="70%" height="70%"></img>   
     
   * 가장 학습이 잘 된 agent의 애니메이션   
+ 
 <img src="./img/agent_animation.gif" width="70%" height="70%"></img>  
    
   * 가장 학습이 잘 된 agent의 model   
+
 <img src="./img/agent_model.png" width="70%" height="70%"></img>   
     
 Libraries required
