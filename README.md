@@ -1,6 +1,6 @@
-> AI-X: Deep Learning 최종 그룹 프로젝트  
-> * Title: DQN with a 2D particle survival game   
-> * Members: 기계공학 2017035787 채민호 / 전기공학 2016026608 강민지   
+> 한양대학교 전기공학과 졸업작품 
+> * Title: DQN with a particle survival game   
+> * 전기공학과 2016026608 강민지   
    
  
 DQN wiht a particle survival game  
