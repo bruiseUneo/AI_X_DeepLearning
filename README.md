@@ -5,7 +5,7 @@
  
 DQN wiht a particle survival game  
 =====================================
-이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. 이를 위해 우선 DQN의 이론적 배경이 되는 Q-Learing과 Deep RL의 개념을 다룬다. particle survival game environment는 다음과 같은 성질을 갖으며 Anson Wong의 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
+이번 프로젝트에서는 DQN이 무엇인지 알아보고, 이를 실제로 particle survival game에 적용해본다. 이를 위해 우선 DQN의 이론적 배경이 되는 Q-Learning과 Deep RL의 개념을 다룬다. particle survival game environment는 다음과 같은 성질을 갖으며 Anson Wong의 [XY_universe](https://github.com/ankonzoid/XY_universe)를 참고하였다.
 * Deep RL agents to learn to stay alive as long as possible via avoiding collisions with obstacles.  
 * DQN agent implementation is provided for immediate usage.  
 * The agent reawrd scheme is +1 for each time step alive, and -100 for obstacle collision.  
