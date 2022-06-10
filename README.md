@@ -1,6 +1,7 @@
 > AI-X: Deep Learning 최종 그룹 프로젝트
 > * Title: DQN with a particle survival game   
 > * Members: 기계공학 2017035787 채민호 / 전기공학 2016026608 강민지
+> * Check Sound recording on YouTube!
    
  
 DQN wiht a particle survival game  
@@ -322,7 +323,13 @@ Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 
 <img src="./img/loss_episode.png" width="50%" height="50%"></img>   
     
     
-    
+   
+Who did what
+------------
+* 채민호 : 1.Q-Learning, 2.Deep RL, YouTube recording
+* 강민지 : 3.DQN, 4.particle survival game, code implementation   
+   
+   
 Libraries required
 ------------------   
 * tensorflow 2.0.0
