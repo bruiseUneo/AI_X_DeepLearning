@@ -1,6 +1,6 @@
-> 한양대학교 전기공학과 졸업작품 
+> AI-X: Deep Learning 최종 그룹 프로젝트
 > * Title: DQN with a particle survival game   
-> * 전기공학과 2016026608 강민지   
+> * Members: 기계공학 2017035787 채민호 / 전기공학 2016026608 강민지
    
  
 DQN wiht a particle survival game  
@@ -309,7 +309,8 @@ Main에서는 우선 에이전트와 환경을 만들고 에피소드 개수를 
   * episode = 442, reward = 2000 (학습이 잘 된 agent의 애니메이션)   
  
 <img src="./img/ep442_animation.gif" width="80%" height="80%"></img>   
-   
+
+   episode = 1과 episode = 442를 비교해 봤을 때, episode = 442의 reward 값이 월등한 것을 알 수 있다. 실제로 episode가 진행될 수록 reward 값은 증가하고 loss 값은 감소하였다.   
       
   * reward
 
