@@ -1,7 +1,7 @@
 > AI-X: Deep Learning 최종 그룹 프로젝트
 > * Title: DQN with a particle survival game   
 > * Members: 기계공학 2017035787 채민호 / 전기공학 2016026608 강민지
-> * [Check Sound recording on YouTube!](https://youtu.be/FG_i2dBYIyU)
+> * Video link: [https://youtu.be/FG_i2dBYIyU](https://youtu.be/FG_i2dBYIyU)
    
  
 DQN with a particle survival game  
